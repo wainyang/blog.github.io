@@ -1,0 +1,2 @@
+# wain的hugo blog
+ 

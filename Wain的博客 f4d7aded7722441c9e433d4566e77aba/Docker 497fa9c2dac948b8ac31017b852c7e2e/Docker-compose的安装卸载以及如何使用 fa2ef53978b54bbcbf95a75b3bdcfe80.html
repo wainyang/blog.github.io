@@ -1,0 +1,784 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Docker-compose的安装卸载以及如何使用</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="fa2ef539-78b5-4bbc-bf95-a75b3bdcfe80" class="page sans"><header><h1 class="page-title">Docker-compose的安装卸载以及如何使用</h1><p class="page-description"></p></header><div class="page-body"><h1 id="41afa73a-afcd-4413-b070-59a2939098ea" class="">一、安装</h1><h3 id="0b71bfca-7411-40cd-9e3f-95471417c988" class="">查看 github上的<code>docker-compose</code>发行版本的地址： <a href="https://github.com/docker/compose/tags">docker-compose/tags</a></h3><p id="ece78ec8-5c4f-440e-ac0b-8052863d4ed0" class="">当前最新的版本是<code>1.26.2</code>。</p><p id="e86caae0-bbd6-4b5c-b385-22553eea6f12" class="">安装的命令如下：</p><pre id="1d73e117-9781-4899-ad15-9f2042360667" class="code code-wrap"><code># 1.拉取
+curl -L &quot;&lt;https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$&gt;(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose
+
+# 2.设置文件具备执行权限
+chmod +x /usr/local/bin/docker-compose
+
+# 3.查看版本信息
+docker-compose -version
+</code></pre><p id="f7e5038d-299e-4d31-a35d-ed79c45c4dae" class="">实例：</p><pre id="b8a260ff-ddbf-4b7f-b0be-c7ba7052a74d" class="code code-wrap"><code>[root@localhost ~]# curl -L &quot;&lt;https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$&gt;(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   638  100   638    0     0   1714      0 --:--:-- --:--:-- --:--:--  1719
+100 11.6M  100 11.6M    0     0  22827      0  0:08:56  0:08:56 --:--:-- 24434
+[root@localhost ~]# chmod +x /usr/local/bin/docker-compose
+[root@localhost ~]# docker-compose -version
+docker-compose version 1.26.2, build eefe0d31
+</code></pre><h3 id="5a92f2bf-a1c3-4d30-90bf-dec730220ca5" class="">二、卸载</h3><pre id="b221b566-c6b2-4fdb-8505-ff10963e4443" class="code code-wrap"><code># 二进制包方式安装的，删除二进制文件即可
+rm /usr/local/bin/docker-compose
+</code></pre><h3 id="abb714fd-fb44-4864-8d5c-93a134f80fdf" class="">三、基本使用</h3><ol type="1" id="d709e481-b3a7-414e-96ff-3ca0f3d63402" class="numbered-list" start="1"><li>查看命令的基本用法<p id="755992b0-dbf0-4ec6-a1a0-4dde6833ca96" class="">可以使用<code>docker-compose [命令] --help|-h</code>来实现。</p></li></ol><ol type="1" id="17d45f6c-c9d5-4d53-b331-2efbd9dbb9dd" class="numbered-list" start="2"><li>命令选项如下<blockquote id="f13fde54-2941-4810-a5b2-bf3f0c654ed8" class="">-f，–file FILE指定使用的Compose模板文件，默认为docker-compose.yml，可以多次指定。<p id="b0017d23-7489-4ce3-b1fc-4337b95adbaa" class="">-p，–project-name NAME指定项目名称，默认将使用所在目录名称作为项目名。</p><p id="1eca3cc0-9e22-4b4a-b3e0-dce2b1ffbe52" class="">-x-network-driver 使用Docker的可拔插网络后端特性（需要Docker 1.9 及以后版本）</p><p id="0a6016b3-d1bb-4fd6-89e7-b734cb8be948" class="">-x-network-driver DRIVER指定网络后端的驱动，默认为bridge（需要Docker 1.9 及以后版本）</p><p id="347e7d99-547e-4701-9f11-77469cfe5dfe" class="">-verbose输出更多调试信息</p><p id="4cc06ca9-1316-460d-b891-97e85e880183" class="">-v，–version打印版本并退出</p></blockquote></li></ol><ol type="1" id="e5b32e45-f402-43a9-8b01-3753228b7dfd" class="numbered-list" start="3"><li>docker-compose常用命令列表<table id="62251c2d-d0be-4ea3-9b12-b94a44f1fb35" class="simple-table"><tbody><tr id="d7cd9b69-bee9-4822-89d5-c337d8828ea1"><td id="IFD}" class="">命令</td><td id="c@XT" class="">说明</td></tr><tr id="8e9ca9cc-a676-4337-aa03-a0662a4870d3"><td id="IFD}" class="">build</td><td id="c@XT" class="">构建项目中的服务容器</td></tr><tr id="48d34e8e-1c9c-4220-b523-d3b637fd136e"><td id="IFD}" class="">help</td><td id="c@XT" class="">获得一个命令的帮助</td></tr><tr id="413b5930-7f43-499e-99a0-47821549ad27"><td id="IFD}" class="">kill</td><td id="c@XT" class="">通过发送SIGKILL信号来强制停止服务容器</td></tr><tr id="1e342c65-2c56-43bf-b86f-238d54f790a5"><td id="IFD}" class="">conﬁg</td><td id="c@XT" class="">验证和查看compose文件配置</td></tr><tr id="cc594b31-d614-4445-9246-14478bb2b3c6"><td id="IFD}" class="">create</td><td id="c@XT" class="">为服务创建容器。只是单纯的create，还需要使用start启动compose</td></tr><tr id="79e2968e-e13c-4b88-a69b-efc9c1f45db6"><td id="IFD}" class="">down</td><td id="c@XT" class="">停止并删除容器，网络，镜像和数据卷</td></tr><tr id="3913919f-f00f-4f4e-bca3-c88a18b74900"><td id="IFD}" class="">exec</td><td id="c@XT" class="">在运行的容器中执行一个命令</td></tr><tr id="3b27ab87-fd8f-4184-bdf7-d126967f6905"><td id="IFD}" class="">logs</td><td id="c@XT" class="">查看服务容器的输出</td></tr><tr id="ac12a3eb-26c9-45e4-acb5-7561fb66f0b8"><td id="IFD}" class="">pause</td><td id="c@XT" class="">暂停一个服务容器</td></tr><tr id="458c6e39-45c1-442f-9ade-53ef7242dbf6"><td id="IFD}" class="">port</td><td id="c@XT" class="">打印某个容器端口所映射的公共端口</td></tr><tr id="e02a9a85-1323-4f65-8c88-3679c0b5e5d7"><td id="IFD}" class="">ps</td><td id="c@XT" class="">列出项目中目前的所有容器</td></tr><tr id="0540db27-27c0-4d0e-bc4f-f924dd917921"><td id="IFD}" class="">pull</td><td id="c@XT" class="">拉取服务依赖的镜像</td></tr><tr id="4e213194-3cc9-4121-aa72-3c6d31420289"><td id="IFD}" class="">push</td><td id="c@XT" class="">推送服务镜像</td></tr><tr id="cb31be45-5e10-49b6-9b6d-bc7be6753548"><td id="IFD}" class="">restart</td><td id="c@XT" class="">重启项目中的服务</td></tr><tr id="095458f8-53c3-436f-a1ed-cdc806bed13a"><td id="IFD}" class="">rm</td><td id="c@XT" class="">删除所有（停止状态的）服务容器</td></tr><tr id="10a82ce6-5802-46bd-a7b9-c8afac96c0ba"><td id="IFD}" class="">run</td><td id="c@XT" class="">在指定服务上执行一个命令</td></tr><tr id="b4d3c20f-2cf7-46e7-aedf-6efe6e8fbcd2"><td id="IFD}" class="">scale</td><td id="c@XT" class="">设置指定服务运行的容器个数</td></tr><tr id="59ef6868-bb73-40b3-882d-56227f5045be"><td id="IFD}" class="">start</td><td id="c@XT" class="">启动已经存在的服务容器</td></tr><tr id="f53fe5a9-9789-4551-8f02-66e7e56d7130"><td id="IFD}" class="">stop</td><td id="c@XT" class="">停止已经处于运行状态的容器，但不删除它</td></tr><tr id="0f9793a7-eb7f-4b46-895e-53369d74d953"><td id="IFD}" class="">top</td><td id="c@XT" class="">显示运行的进程</td></tr><tr id="3a843312-ad1a-460c-87f3-59d21126e8c4"><td id="IFD}" class="">unpause</td><td id="c@XT" class="">恢复处于暂停状态中的服务</td></tr><tr id="67ce4841-1170-4866-9447-28ead412204f"><td id="IFD}" class="">up</td><td id="c@XT" class="">自动完成包括构建镜像、创建服务、启动服务并关闭关联服务相关容器的一些列操作</td></tr><tr id="df07159f-1832-4a89-8c66-a26ed2d69874"><td id="IFD}" class="">version</td><td id="c@XT" class="">打印版本信息</td></tr></tbody></table></li></ol><h3 id="60d16d54-ccf6-40bf-9808-246449a30ffc" class="">四、常用命令使用</h3><ol type="1" id="01bb64fe-08de-4fe7-b72a-11c0e257b65c" class="numbered-list" start="1"><li>up<p id="272723a6-7f4f-4171-a3ab-2b30a9fd1bee" class="">格式为：</p><pre id="8b914729-a334-464d-9043-acb1852b7a3f" class="code code-wrap"><code>docker-compose up [options] [--scale SERVICE=NUM...] [SERVICE...]
+</code></pre><p id="241749e2-c22f-44a1-a782-72c31a80d218" class="">up命令十分强大，它尝试自动完成包括构建镜像，（重新）创建服务，启动服务，并关联服务相关容器的 一些列操作。链接的服务都将会被自动启动，除非已经处于运行状态。</p><p id="77b6e584-fef2-47e5-9297-19249110b170" class="">多数情况下我们可以直接通过该命令来启动一个项目。</p><p id="98b68459-a04b-40d8-983f-ef26ae3a64f8" class="">选项包括：</p><blockquote id="9d0aa976-b806-4475-a955-889878fce847" class="">-d 在后台运行服务容器<p id="5db435a4-2f73-4f4d-9704-383c31b23099" class="">–no-color 不使用颜色来区分不同的服务的控制输出</p><p id="71c0e9f5-5650-468b-9bc4-2126841fce15" class="">–no-deps 不启动服务所链接的容器</p><p id="d8fcd506-6b4f-4b2b-80c7-5f4c1c8ecdd1" class="">–force-recreate 强制重新创建容器，不能与–no-recreate同时使用</p><p id="c1a5e438-e511-4b1e-a781-65178db9f65e" class="">–no-recreate 如果容器已经存在，则不重新创建，不能与–force-recreate同时使用</p><p id="c377203f-8713-4e6d-9e60-b6a594a07ad3" class="">–no-build 不自动构建缺失的服务镜像</p><p id="02d49495-21ac-4a28-a00e-3f054e8e2670" class="">–build 在启动容器前构建服务镜像</p><p id="d5199c57-bc54-4ed6-bc37-ad0418a66785" class="">–abort-on-container-exit 停止所有容器，如果任何一个容器被停止，不能与-d同时使用</p><p id="4f09cd33-d82c-4d2f-a770-485de7ddbdea" class="">-t, --timeout TIMEOUT 停止容器时候的超时（默认为10秒）</p><p id="503bcece-34f3-4032-85bc-35e1c81c88ef" class="">–remove-orphans 删除服务中没有在compose文件中定义的容器</p><p id="2ad32d90-0d22-4a58-a525-3bc942fd80a3" class="">–scale SERVICE=NUM 设置服务运行容器的个数，将覆盖在compose中通过scale指定的参数</p></blockquote></li></ol><ol type="1" id="234ca4c4-8cae-488d-8ebe-9803523718bd" class="numbered-list" start="2"><li>ps<p id="1bc59b53-3915-40e6-94d0-e807d70305b2" class="">格式为：</p><pre id="0d1635d5-94ad-4ff7-99c4-c083da116620" class="code code-wrap"><code>docker-compose ps [options] [SERVICE...]
+</code></pre><p id="73107e0d-47d8-47f8-9dae-5f8760476f81" class="">列出项目中目前的所有容器。</p><p id="25308482-d465-49b1-82c0-aacb6ecf3c18" class="">选项包括：</p><blockquote id="2d9f7e48-c130-45fc-bb67-30fbabd90932" class="">-q 只打印容器的ID信息</blockquote></li></ol><ol type="1" id="a3eb953d-252a-4617-918c-0f88f1954542" class="numbered-list" start="3"><li>stop<p id="92aba425-c697-4078-87c2-4a8d1dd981b9" class="">格式为：</p><pre id="81ea2c70-407c-4c92-b3c8-dd2e282fae98" class="code code-wrap"><code>docker-compose stop [options] [SERVICE...]
+</code></pre><p id="a1b6ad41-b59d-415a-bb94-e9b0e77805ec" class="">停止已经处于运行状态的容器，但不删除它。</p><p id="2aac54b8-4478-466c-98c4-bf79b8584b5b" class="">选项包括：</p><blockquote id="d491d63d-152b-402a-880c-b2b71b33f1c6" class="">-t, --timeout TIMEOUT 停止容器时候的超时（默认为10秒）</blockquote></li></ol><ol type="1" id="e5cf3b45-3fb0-4fc0-b39c-817c795f4d2b" class="numbered-list" start="4"><li>down<p id="874bc151-a596-4370-a0fb-b2336eb0519e" class="">格式为：</p><pre id="f4819a1b-a103-4c69-9fd5-1825a1fde939" class="code code-wrap"><code>docker-compose down [options]
+</code></pre><p id="bbb78c6d-9d12-4c47-bdf2-5d6dcd219370" class="">停止和删除容器、网络、卷、镜像，这些内容是通过docker-compose up命令创建的. 默认值删除 容器 网络，可以通过指定 rmi 、volumes参数删除镜像和卷。</p><p id="71a95b46-f71f-4942-8f60-bd7f287ab57b" class="">选项包括：</p><blockquote id="85b14f05-d39a-4bdc-9513-db8e695e6afe" class="">–rmi type 删除镜像，类型必须是: ‘all’: 删除compose文件中定义的所以镜像；‘local’: 删除镜像名为空的<p id="5fd55e29-c2b3-41ce-a468-13ccf23988e2" class="">镜像</p><p id="13570c24-7ac0-452e-9c16-951545597a7d" class="">-v, --volumes 删除已经在compose文件中定义的和匿名的附在容器上的数据卷</p><p id="dc54fa0c-ee2a-48d0-94aa-3c578d7da7e7" class="">–remove-orphans 删除服务中没有在compose中定义的容器</p></blockquote><p id="fae91d5a-3c7b-4a0e-b74d-68ba354f66e8" class="">在root目录下，移除root的实例：</p><pre id="1932faeb-b83d-4c10-ac2e-60379cbc976e" class="code code-wrap"><code>[root@localhost ~]# docker-compose down
+Stopping root_mysql_1 ... done
+Stopping root_php_1   ... done
+Removing root_mysql_1 ... done
+Removing root_php_1   ... done
+Removing root_nginx_1 ... done
+Removing network root_web-net
+</code></pre></li></ol><ol type="1" id="2f146b35-8c1b-4eaf-b80e-de2dfdba4286" class="numbered-list" start="5"><li>restart<p id="e3a71b6f-c951-42b9-9b26-16d45f0e055a" class="">格式为：</p><pre id="a65a2fdd-c411-4e1e-b6b4-5ae42dbf83cd" class="code code-wrap"><code>docker-compose restart [options] [SERVICE...]
+</code></pre><p id="c3de9fbb-9fa0-48a8-b3d3-e9505bfd2649" class="">重启项目中的服务。</p><p id="6f9d5f1a-2df4-43c1-a7d6-e8c3cfdeb63a" class="">选项包括：</p><blockquote id="a62f166c-eee2-4594-bd15-ddfd808ed394" class="">-t, --timeout TIMEOUT 指定重启前停止容器的超时（默认为10秒）</blockquote></li></ol><ol type="1" id="405a2215-3e5c-4fe7-8307-6b63bd528eca" class="numbered-list" start="6"><li>rm<p id="131fb77c-e743-48ab-8d14-dbc5f0f33ca4" class="">格式为：</p><pre id="6bab5a6d-9b55-4df8-85f3-23f5a61ce04f" class="code code-wrap"><code>docker-compose rm [options] [SERVICE...]
+</code></pre><p id="ab38e981-5ec5-45fb-8cb3-81890d6040cf" class="">删除所有（停止状态的）服务容器。</p><p id="7b4c01eb-e2f5-4a50-926e-cfd9d598ee89" class="">选项包括：</p><blockquote id="ca7eacc8-21a7-47bc-a556-4b9c8bc545b1" class="">–f, --force 强制直接删除，包括非停止状态的容器<p id="fa31b4b5-5414-4cd3-8567-0031572ec789" class="">-v 删除容器所挂载的数据卷</p></blockquote></li></ol><ol type="1" id="7b7a793e-26b3-4640-92d5-9e9d310372b3" class="numbered-list" start="7"><li>start<p id="6c9450d4-fe13-47aa-b695-0aef7a7827b1" class="">格式为：</p><pre id="f3416c34-5e27-4392-aa6c-7705bf63620c" class="code code-wrap"><code>docker-compose start [SERVICE...]
+</code></pre><p id="f35ef9a8-2253-4f34-ac0b-8947c6539ea2" class="">启动已经存在的服务容器。</p></li></ol><ol type="1" id="42d3c7ea-69a7-4c83-8194-4dd0a6866eb5" class="numbered-list" start="8"><li>run<p id="914619ee-26a5-4248-80fa-ed0f2593e276" class="">格式为：</p><pre id="49c9bc2d-729c-4ba9-bb0e-b25bb97a3c67" class="code code-wrap"><code>docker-compose run [options] [-v VOLUME...] [-p PORT...] [-e KEY=VAL...] SERVICE [COMMAND] [ARGS...]
+</code></pre><p id="0a397413-b679-4bcb-8f47-4f33160f72dc" class="">在指定服务上执行一个命令。</p><p id="1c21395b-8e92-481f-8dc0-aa4ea2c66108" class="">例如：</p><pre id="4ca66b19-3d08-424e-8f61-9109a9554698" class="code code-wrap"><code>docker-compose run ubuntu ping www.baidu.com
+</code></pre><p id="cfdc49b6-ae17-49fb-a78d-ceb41f670c44" class="">将会执行一个ubuntu容器，并执行ping <a href="https://links.jianshu.com/go?to=http%3A%2F%2Fwww.baidu.com">www.baidu.com</a>命令。</p><p id="9b44d218-906a-45f0-a5a2-d4a2dbb9ac79" class="">将会执行一个ubuntu容器，并执行ping <a href="https://links.jianshu.com/go?to=http%3A%2F%2Fwww.baidu.com">www.baidu.com</a>命令。</p><p id="e85a5c34-903e-42b5-abc5-d03883a73ae5" class="">默认情况下，如果存在关联，则所有关联的服务将会自动被启动，除非这些服务已经在运行中。该命令类似于启动容器后运行指定的命令，相关卷、链接等都会按照配置自动创建。有两个不同点：</p><ol type="1" id="c90ef766-551c-404a-aee5-e112b2bb40b6" class="numbered-list" start="1"><li>给定命令将会覆盖原有的自动运行命令</li></ol><ol type="1" id="9c98e51d-2a16-4f91-a9e2-b98a520cbcaa" class="numbered-list" start="2"><li>不会自动创建端口，以避免冲突
+如果不希望自动启动关联的容器，可以使用–no-deps选项，例如：</li></ol><pre id="9e189a0d-71cd-4197-a904-6d71d5fc05be" class="code code-wrap"><code>docker-compose run --no-deps web
+</code></pre><p id="6febcdff-47f9-4565-a698-5269e67c7611" class="">将不会启动web容器关联的其他容器。</p><p id="bf9d31f4-1af3-4ac2-8286-3dc58f0b3350" class="">选项包括：</p><blockquote id="e1c22895-fb51-4320-ace1-0b61ad965a82" class="">-d 在后台运行服务容器<p id="2f2a3b7a-e57c-4ac2-879e-fbc0840ecea8" class="">–name NAME 为容器指定一个名字</p><p id="3e648554-caae-4219-b7c5-82dd5fee67c8" class="">–entrypoint CMD 覆盖默认的容器启动指令</p><p id="ac790825-4043-41be-946a-21cc6a6965f8" class="">-e KEY=VAL 设置环境变量值，可多次使用选项来设置多个环境变量</p><p id="e7613aaf-8e93-4c27-994b-7930aea6963b" class="">-u, --user=&quot;&quot; 指定运行容器的用户名或者uid</p><p id="da719342-5489-414d-9a59-58bfc13e52ff" class="">–no-deps 不自动启动管理的服务容器</p><p id="9cd0abfd-a93b-45f2-87b1-d8e019f1820f" class="">–rm 运行命令后自动删除容器，d模式下将忽略</p><p id="026ab1c0-b8aa-4a1b-89a7-0ae78997f208" class="">-p, --publish=\[\] 映射容器端口到本地主机</p><p id="7c7faaee-2f43-4983-92e8-530c531a657e" class="">–service-ports 配置服务端口并映射到本地主机</p><p id="f52db32b-7e43-47cd-9165-afa081c24ce8" class="">-v, --volume=\[\] 绑定一个数据卷，默认为空</p><p id="fa9f9da3-ec54-48ce-b1bb-00f17e341870" class="">-T 不分配伪tty，意味着依赖tty的指令将无法运行</p><p id="79e9a2b8-5c55-475e-9c89-b1454cf1a818" class="">-w, --workdir=&quot;&quot; 为容器指定默认工作目录</p></blockquote></li></ol><ol type="1" id="8746f769-8e8f-4895-869e-a7597284694e" class="numbered-list" start="9"><li>conﬁg<p id="e754430e-be24-4660-b0cc-5a7414ddcbf4" class="">格式为：</p><pre id="305546a6-4312-421d-8c36-ee14af184fe7" class="code code-wrap"><code>docker-compose config [options]
+</code></pre><p id="77ce8b90-4bff-483e-aa40-6b8f4dace676" class="">验证并查看compose文件配置。</p><p id="7ff26fde-059e-4d80-b051-9157ef55b67e" class="">选项包括：</p><blockquote id="6d00314d-e3b5-4600-af96-50510f115254" class="">–resolve-image-digests 将镜像标签标记为摘要<p id="1db64db3-df7d-45db-9b44-7f00f9776b91" class="">-q, --quiet 只验证配置，不输出。 当配置正确时，不输出任何内容，当文件配置错误，输出错误信息</p><p id="19eb2e98-b175-4ef6-9841-49dbc13ad01c" class="">–services 打印服务名，一行一个</p><p id="41afc307-de37-490e-8e53-8d1346fc0e38" class="">–volumes 打印数据卷名，一行一个</p></blockquote></li></ol><ol type="1" id="7fcaa91e-2126-4caa-a344-482ad9d227b3" class="numbered-list" start="10"><li>kill<p id="6139b8f0-8d2b-4168-b940-5d3a6817f7f0" class="">格式为：</p></li></ol><pre id="9645d251-59f5-4838-9e53-53ec8daa2dd3" class="code code-wrap"><code>```
+docker-compose kill [options] [SERVICE...]
+```
+
+通过发送SIGKILL信号来强制停止服务容器。 支持通过-s参数来指定发送的信号，例如：通过如下指令发送SIGINT信号：
+
+```
+docker-compose kill -s SIGINT
+```
+</code></pre><ol type="1" id="94ad3fbb-4f04-4856-b42d-521be22b5495" class="numbered-list" start="1"><li>create
+格式为：</li></ol><pre id="75636254-5de3-4960-b032-f97492ad96a3" class="code code-wrap"><code>```
+docker-compose create [options] [SERVICE...]
+```
+
+为服务创建容器.只是单纯的create，还需要使用start启动compose。
+选项包括：
+
+&gt; –force-recreate 重新创建容器，即使它的配置和镜像没有改变，不兼容–no-recreate参数
+&gt; –no-recreate 如果容器已经存在，不需要重新创建. 不兼容–force-recreate参数
+&gt; –no-build 不创建镜像，即使缺失
+&gt; –build 创建容器前，生成镜像
+</code></pre><ol type="1" id="69ba32df-37f4-494f-bfba-ccb8879f3ec4" class="numbered-list" start="1"><li>exec
+格式为：</li></ol><pre id="7f4da0ff-0b08-4bbc-91e5-ea71e8c4fbb8" class="code code-wrap"><code>```
+docker-compose exec [options] SERVICE COMMAND [ARGS...]
+```
+
+与docker exec 命令功能相同，可以通过service name登陆到容器中。
+选项包括：
+
+&gt; -d 分离模式，后台运行命令.
+&gt; –privileged 获取特权.
+&gt; –user USER 指定运行的用户.
+&gt; -T 禁用分配TTY. By default docker-compose exec分配 a TTY.
+&gt; –index=index 当一个服务拥有多个容器时，可通过该参数登陆到该服务下的任何服务，例如：docker-compose exec --index=1 web /bin/bash ，web服务中包含多个容器
+</code></pre><h3 id="d3315124-97ce-4f7b-a306-c4ee1c5ce60c" class="">五、docker-compose模版文件使用</h3><p id="89167562-8a22-4080-ab41-df2923def246" class="">模板文件是<code>docker-compose</code>的核心。在文件中，可以根据自己的定义，管理多个容器的操作，包括他们的运行，通信等。模板文件的模式名称是<code>docker-compose.yml</code>，格式是<code>YAML</code>合适。</p><p id="ba6c7a35-abac-49a4-8bba-3eb84d00b255" class="">一个模板文件的格式如下</p><pre id="c92001e1-c2a6-4ff6-aaca-520a94841a44" class="code code-wrap"><code>version: &quot;2&quot;
+services:
+
+volumes:
+
+networks:
+</code></pre><blockquote id="61bd790d-26cc-456e-bd72-43adedf3a4ee" class="">services：<p id="fde2a04f-a809-4d82-95e5-34b0eea3ff29" class="">定义应用需要的服务的项目，包括定义服务的名字，镜像，数据卷，所属网络，依赖的其他服务等。</p><p id="be4d4946-10da-4a59-bdad-e571055e6b08" class="">volumes：</p><p id="8389f9d1-b11e-4051-84bf-571f552daf3a" class="">这里定义数据卷的名称，供不同服务下的应用使用。</p><p id="75f3bd60-c79f-4339-bc68-5181b8ba9795" class="">networks：</p><p id="38635bce-7d44-4594-8f8e-86ce2b98c88e" class="">这里定义网路的名称，供不同的服务下的应用使用。</p></blockquote><p id="cea398d0-41bd-4a77-8808-cdb9c31a392d" class="">Docker Compose常用模板文件主要命令：</p><table id="c6c9f2e8-9079-41d9-8767-42fae4770ff7" class="simple-table"><tbody><tr id="a78629b1-116a-4261-bfd4-51196fed46f3"><td id="YDbg" class="">指令</td><td id="J&gt;Vj" class="">功能</td></tr><tr id="06a4fc10-5b9e-4b21-b4ce-44c613830a64"><td id="YDbg" class="">build</td><td id="J&gt;Vj" class="">指定服务镜像Dockerﬁle所在路径</td></tr><tr id="2368b6ea-9064-4093-815b-6de599bc7385"><td id="YDbg" class="">cap\_add，cap\_drop</td><td id="J&gt;Vj" class="">指定容器的内核能力（capacity）分配</td></tr><tr id="c72c212f-f2e1-46a9-8b43-a35e3ce09602"><td id="YDbg" class="">command</td><td id="J&gt;Vj" class="">覆盖容器启动后默认执行的命令</td></tr><tr id="7e019ac3-16b3-47d7-a86d-fb2441577fce"><td id="YDbg" class="">cgroup_parent</td><td id="J&gt;Vj" class="">指定父cgroup组，意味着将基础该组的资源限制</td></tr><tr id="26e9a0ad-ea85-47cd-b397-6951a918aae0"><td id="YDbg" class="">container_name</td><td id="J&gt;Vj" class="">指定容器名称。默认将会使用项目名称服务名称序号这样的格式</td></tr><tr id="4e1b43fe-8e96-4682-938e-9aa8a485a774"><td id="YDbg" class="">devices</td><td id="J&gt;Vj" class="">指定设置映射关系</td></tr><tr id="3c4d57bf-d923-4d8a-90f1-167c0d51f019"><td id="YDbg" class="">dns</td><td id="J&gt;Vj" class="">自定义DNS服务器。可以是一个值，也可以是一个列表</td></tr><tr id="90d610b8-9df4-4bd4-b3c9-338d42414ca3"><td id="YDbg" class="">dns_search</td><td id="J&gt;Vj" class="">配置DNS搜索域。可以是一个值，也可以是一个列表</td></tr><tr id="52a59253-d6ac-4d43-93ad-ee6cd3f3b82b"><td id="YDbg" class="">dockerﬁle</td><td id="J&gt;Vj" class="">指定额外编译镜像的Dockerﬁle文件，可以通过该指令来指定</td></tr><tr id="9b0636fb-28d2-43b6-8681-58ff10791436"><td id="YDbg" class="">env_ﬁle</td><td id="J&gt;Vj" class="">从文件中获取环境变量，可以为单独的文件路径或列表</td></tr><tr id="781f4727-3df4-412d-b5ec-5b9b12ecc39e"><td id="YDbg" class="">environment</td><td id="J&gt;Vj" class="">设置环境变量，可以使用数组或字典两种格式</td></tr><tr id="b758b0ce-d630-432e-9e4d-f0c6ac38598e"><td id="YDbg" class="">expose</td><td id="J&gt;Vj" class="">暴露端口</td></tr><tr id="60231f63-27e7-43b3-bd44-85d16a192b24"><td id="YDbg" class="">external_links</td><td id="J&gt;Vj" class="">链接到docker-compose.yml外部的容器，甚至可以是非Compose管理的外部容器</td></tr><tr id="eed9c26d-0c61-4d25-9c89-185abd944605"><td id="YDbg" class="">extra_hosts</td><td id="J&gt;Vj" class="">指定额外的host名称映射信息</td></tr><tr id="8521cfa8-df71-49bf-a9eb-2a453fce28b4"><td id="YDbg" class="">image</td><td id="J&gt;Vj" class="">指定为镜像名称或镜像ID。如果镜像在本地不存在，Compose将会尝试拉取这个镜像</td></tr><tr id="7aad1261-59a6-40d0-b6c1-1942e5b7b84d"><td id="YDbg" class="">labels</td><td id="J&gt;Vj" class="">指定服务镜像Dockerﬁle所在路径</td></tr><tr id="16efb124-6c40-4c9b-a7c5-4b2985853236"><td id="YDbg" class="">links</td><td id="J&gt;Vj" class="">链接到其他服务中的容器</td></tr><tr id="02ee17a6-d9e9-47b6-aab1-bcd724c21101"><td id="YDbg" class="">log_driver</td><td id="J&gt;Vj" class="">指定日志驱动类型，类似于Docker中的–log-driver参数。目前支持三种日志驱动类型：log\_driver:“json-ﬁle”、 log\_driver:“syslog”、log_driver:“none”</td></tr><tr id="c8956e27-c7aa-41cb-83c4-87d8afe61f82"><td id="YDbg" class="">log_opt</td><td id="J&gt;Vj" class="">日志驱动的相关参数</td></tr><tr id="9d61f1a2-4129-46b5-8a6d-45f8c57ba4c4"><td id="YDbg" class="">net</td><td id="J&gt;Vj" class="">设置网络模式。参数类似于docker clinet的–net参数一样</td></tr><tr id="d4960661-d20f-4f1a-8f30-910b35bded33"><td id="YDbg" class="">pid</td><td id="J&gt;Vj" class="">跟主机系统共享进程命名空间。打开该选项的容器之间，以及容器和宿主机系统之间可以通过进程ID来相互访问和操作</td></tr><tr id="acbd31f4-a404-4718-a51b-3bd9749dd5f9"><td id="YDbg" class="">ports</td><td id="J&gt;Vj" class="">暴露端口信息</td></tr><tr id="6b47c90b-2750-48bb-b0e4-7d717b6e8029"><td id="YDbg" class="">security_opt</td><td id="J&gt;Vj" class="">指定容器模板标签（label）机制的默认属性（如用户、角色、类型、级别等）</td></tr><tr id="b142d6ad-d01e-47a0-83af-c98e438ed366"><td id="YDbg" class="">ulimits</td><td id="J&gt;Vj" class="">指定容器的ulimits限制值</td></tr><tr id="884e1c21-cfd9-4bca-ac95-a49dd5531ee5"><td id="YDbg" class="">volumes</td><td id="J&gt;Vj" class="">数据卷所挂载路径设置。可以设置宿主机路径（HOST:CONTAINER）或加上访问模式（HOST:CONTAINER:ro） <a href="https://links.jianshu.com/go?to=https%3A%2F%2Fdocs.docker.com%2Fcompose%2Fcompose-file%2F%23volumes">卷-官方文档</a></td></tr></tbody></table><p id="d14b76ad-5c1b-4e70-8f8e-53b13e805717" class="">这里展示了一个使用模板文件的实例：</p><pre id="896ce499-cb23-473f-b15e-8982282d4187" class="code code-wrap"><code>version: &#x27;1&#x27;
+services:
+  redis:
+    image: redis
+    ports:
+      - &quot;6379:6379&quot;
+    container_name: &quot;redis&quot;
+    networks:
+      - dev
+  mysql:
+    image: centos/mysql-57-centos7
+    environment:
+      MYSQL_ROOT_PASSWORD: &quot;root&quot;
+    ports:
+      - &quot;3306:3306&quot;
+    container_name: &quot;mysql&quot;
+    networks:
+      - dev
+  web:
+    image: tomcat
+    ports:
+      - &quot;9090:8080&quot;
+    container_name: &quot;web&quot;
+    networks:
+      - dev
+      - pro
+networks:
+  dev:
+    driver: bridge
+  pro:
+    driver: bridge
+</code></pre></div></article></body></html>
